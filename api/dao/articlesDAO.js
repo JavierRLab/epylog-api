@@ -27,10 +27,10 @@ export default class articlesDAO {
       if ("title" in filters) {
         let regexQuery = new RegExp(`.*${filters["title"]}.*`, "i");
         query = { title: { $regex: regexQuery } };
-      } else if ("ISCED" in filters) {
+      } /* else if ("ISCED" in filters) {
         let regexQuery = new RegExp(`.*${filters["ISCED"]}.*`, "i");
         query = { title: { $regex: regexQuery } };
-      }
+      } */
     }
 
     let cursor;

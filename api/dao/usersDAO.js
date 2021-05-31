@@ -17,19 +17,12 @@ export default class usersDAO {
     }
   }
 
-  static async getUsers({
-    filters = null,
-    page = 0,
-    articlesPerPage = 10,
-  } = {}) {
+  static async getUsers({ filters = null, page = 0, usersPerPage = 10 } = {}) {
     let query;
     if (filters) {
-      if ("title" in filters) {
-        let regexQuery = new RegExp(`.*${filters["title"]}.*`, "i");
-        query = { title: { $regex: regexQuery } };
-      } else if ("ISCED" in filters) {
-        let regexQuery = new RegExp(`.*${filters["ISCED"]}.*`, "i");
-        query = { title: { $regex: regexQuery } };
+      if ("familyName" in filters) {
+        let regexQuery = new RegExp(`.*${filters["familyName"]}.*`, "i");
+        query = { familyName: { $regex: regexQuery } };
       }
     }
 
@@ -41,61 +34,57 @@ export default class usersDAO {
     } catch (e) {
       console.error(`Unable to issue find command: ${e}`);
       return {
-        articlesList: [],
-        totalNumArticles: 0,
+        usersList: [],
+        totalNumUsers: 0,
       };
     }
 
-    const displayCursor = cursor
-      .limit(articlesPerPage)
-      .skip(articlesPerPage * page);
+    const displayCursor = cursor.limit(usersPerPage).skip(usersPerPage * page);
 
     try {
-      const articlesList = await displayCursor.toArray();
-      const totalNumArticles = await users.countDocuments(query);
+      const usersList = await displayCursor.toArray();
+      const totalNumUsers = await users.countDocuments(query);
 
-      return { articlesList: articlesList, totalNumArticles: totalNumArticles };
+      return { usersList: usersList, totalNumUsers: totalNumUsers };
     } catch (e) {
       console.error(
         `Unable to convert cursor to array or problem counting documents: ${e}`
       );
-      return { articlesList: [], totalNumArticles: 0 };
+      return { usersList: [], totalNumUsers: 0 };
     }
   }
 
-  static async getArticleById(articleId) {
+  static async getUserById(articleId) {
     try {
-      const articleResponse = await users.findOne({
+      const userResponse = await users.findOne({
         _id: ObjectId(articleId),
       });
-      return articleResponse;
+      return userResponse;
     } catch (e) {
       console.error(`Unable to issue find command: ${e}`);
       return { error: e };
     }
   }
 
-  static async addArticle(
-    title,
+  static async addUser(
+    email,
+    password,
+    givenName,
+    familyName,
+    birthDate,
+    interests,
     description,
-    categoryIds,
-    ISCED,
-    publishDate,
-    content,
-    uploadDate
+    tokens
   ) {
     try {
-      const articleDoc = {
-        title: title,
-        description: description,
-        category_ids: categoryIds.toObjectId(),
-        ISCED: ISCED,
-        publishDate: publishDate,
-        uploadDate: uploadDate,
-        content: content,
-      };
+      if (validator.isEmail(email)) {
+        console.log(email, "Invalid Email address");
+        throw new Error({ error: "Invalid Email address" });
+      }
 
-      return await users.insertOne(articleDoc);
+      const userDoc = {};
+
+      return await users.insertOne(userDoc);
     } catch (e) {
       console.error(`Unable to post article: ${e}`);
       return { error: e };

@@ -15,7 +15,7 @@ export default class CategoryController {
       const categories = await Category.getAllCategories();
       res.status(200).json({ categories, status: "success" });
     } catch (e) {
-      res.status(404).json({ error: e, status: "error" });
+      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -24,7 +24,7 @@ export default class CategoryController {
       const category = await Category.getCategoryById(req.params.categoryId);
       res.status(200).json({ category, status: "success" });
     } catch (e) {
-      res.status(404).json({ error: e, status: "error" });
+      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -33,7 +33,7 @@ export default class CategoryController {
       const categories = await Category.getMainCategories();
       res.status(200).json({ categories, status: "success" });
     } catch (e) {
-      res.status(404).json({ error: e, status: "error" });
+      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -44,7 +44,7 @@ export default class CategoryController {
       );
       res.status(200).json({ categories, status: "success" });
     } catch (e) {
-      res.status(404).json({ error: e, status: "error" });
+      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -65,7 +65,7 @@ export default class CategoryController {
 
       res.status(201).json({ category, status: "success" });
     } catch (e) {
-      res.status(400).json({ error: e, status: "error" });
+      res.status(400).json({ error: e.message, status: "error" });
     }
   }
 
@@ -94,7 +94,7 @@ export default class CategoryController {
       // to-do: other status
       res.status(201).json({ data, status: "success" });
     } catch (e) {
-      res.status(500).json({ error: e, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 
@@ -116,7 +116,7 @@ export default class CategoryController {
 
       res.json({ data, status: "success" });
     } catch (e) {
-      res.status(500).json({ error: e, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 }

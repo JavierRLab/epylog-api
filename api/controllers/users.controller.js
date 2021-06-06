@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export default class UserController {
   static async apiGetUser(req, res, next) {
-    res.status(200).send(req.user);
+    res.status(200).json(req.user);
   }
 
   static async apiPostUser(req, res, next) {
@@ -11,9 +11,9 @@ export default class UserController {
       const user = new User(req.body);
       await user.save();
       const token = await user.generateAuthToken();
-      res.status(201).send({ user, token });
+      res.status(201).json({ user, token });
     } catch (e) {
-      res.status(400).send(e);
+      res.status(400).json(e);
     }
   }
 
@@ -25,10 +25,10 @@ export default class UserController {
       if (!user) {
         return res
           .status(401)
-          .send({ error: "Login failed! Check authentication credentials" });
+          .json({ error: "Login failed! Check authentication credentials" });
       }
       const token = await user.generateAuthToken();
-      res.send({ user, token });
+      res.json({ user, token });
     } catch (e) {
       console.log(e);
       res.status(400).json({ errorNo: 400, msg: e.message });
@@ -43,11 +43,11 @@ export default class UserController {
       });
 
       await req.user.save();
-      res.status(200).send({
+      res.status(200).json({
         success: true,
       });
     } catch (e) {
-      res.status(500).send(e);
+      res.status(500).json(e);
     }
   }
 
@@ -56,11 +56,11 @@ export default class UserController {
     try {
       req.user.tokens.splice(0, req.user.tokens.length);
       await req.user.save();
-      res.status(200).send({
+      res.status(200).json({
         success: true,
       });
     } catch (e) {
-      res.status(500).send(e);
+      res.status(500).json(e);
     }
   }
 }

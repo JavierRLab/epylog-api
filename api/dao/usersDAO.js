@@ -79,7 +79,7 @@ export default class usersDAO {
     try {
       if (validator.isEmail(email)) {
         console.log(email, "Invalid Email address");
-        throw new Error({ error: "Invalid Email address" });
+        throw new Error("Invalid Email address");
       }
 
       const userDoc = {};

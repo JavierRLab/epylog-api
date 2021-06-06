@@ -13,7 +13,7 @@ app.use("/api/v1/articles", articles);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/users", users);
 app.use("*", (req, res) => {
-  res.status(404).json({ errorNo: 404, msg: "not found" });
+  res.status(404).json({ errorNo: 404, msg: "Route not found" });
 });
 
 export default app;

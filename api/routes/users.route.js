@@ -14,4 +14,6 @@ router.route("/me/logout").post(auth, UserCtrl.apiLogOutUser);
 
 router.route("/me/logoutall").post(auth, UserCtrl.apiLogOutAll);
 
+// /me/newArticle
+
 export default router;

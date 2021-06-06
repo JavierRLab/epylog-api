@@ -1,78 +1,122 @@
-import { response } from "express";
-import CategoriesDAO from "../dao/categoriesDAO.js";
+// import { response } from "express";
+// import CategoriesDAO from "../dao/categoriesDAO.js";
+import Category from "../models/Category.js";
 
 export default class CategoryController {
   static async apiGetCategories(req, res, next) {
-    const categoriesList = await CategoriesDAO.getCategories();
-    console.log(categoriesList);
-    let categoriesResponse = { categories: categoriesList };
-    res.json({ response: categoriesResponse, status: "success" });
+    // vanilla mongo:
+
+    //   const categoriesList = await CategoriesDAO.getCategories();
+    //   console.log(categoriesList);
+    //   let categoriesResponse = { categories: categoriesList };
+    //   res.json({ categoriesResponse, status: "success" });
+
+    try {
+      const categories = await Category.getAllCategories();
+      res.status(200).json({ categories, status: "success" });
+    } catch (e) {
+      res.status(404).json({ error: e, status: "error" });
+    }
+  }
+
+  static async apiGetCategory(req, res, next) {
+    try {
+      const category = await Category.getCategoryById(req.params.categoryId);
+      res.status(200).json({ category, status: "success" });
+    } catch (e) {
+      res.status(404).json({ error: e, status: "error" });
+    }
+  }
+
+  static async apiGetMainCategories(req, res, next) {
+    try {
+      const categories = await Category.getMainCategories();
+      res.status(200).json({ categories, status: "success" });
+    } catch (e) {
+      res.status(404).json({ error: e, status: "error" });
+    }
+  }
+
+  static async apiGetSubCategoriesByMainId(req, res, next) {
+    try {
+      const categories = await Category.getSubCategoriesByMainId(
+        req.params.mainId
+      );
+      res.status(200).json({ categories, status: "success" });
+    } catch (e) {
+      res.status(404).json({ error: e, status: "error" });
+    }
   }
 
   static async apiPostCategory(req, res, next) {
     try {
-      const name = req.body.name;
-      const mainCategory = req.body.mainCategory;
+      // vanilla mongo:
 
-      const categoryResponse = await CategoriesDAO.addCategory(
-        name,
-        mainCategory
-      );
+      // const name = req.body.name;
+      // const mainCategory = req.body.mainCategory;
 
-      res.json({ /* response: categoryResponse, */ status: "success" });
+      // const category = await CategoriesDAO.addCategory(
+      //   name,
+      //   mainCategory
+      // );
+
+      const category = new Category(req.body);
+      await category.save();
+
+      res.status(201).json({ category, status: "success" });
     } catch (e) {
-      res.status(500).json({ errorNo: 500, msg: e.message });
+      res.status(400).json({ error: e, status: "error" });
     }
   }
 
   static async apiUpdateCategory(req, res, next) {
     try {
-      const categoryId = req.params.categoryId;
-      const name = req.body.name;
-      const mainCategory = req.body.mainCategory;
+      const category = await Category.findById(req.params.categoryId);
 
-      const categoryResponse = await CategoriesDAO.updateCategory(
-        categoryId,
-        name,
-        mainCategory
-      );
-
-      // var { error } = categoryResponse;
-      // if (error) {
-      //   res.status(400).json({ error });
-      // }
-
-      // if (categoryResponse.modifiedCount === 0) {
-      //   throw new Error(
-      //     "unable to update article - user may not be original poster"
-      //   );
-      // }
-
-      if (categoryResponse.modifiedCount === 0 || categoryResponse.error) {
-        throw new Error(`No article found with Id: ${categoryId}`);
+      if (!category) {
+        return res.status(404).json({
+          error: `No category found with id: ${req.params.categoryId}`,
+          status: "error",
+        });
       }
 
-      res.json({ /* response: categoryResponse, */ status: "success" });
+      const { name, mainCategory } = req.body;
+
+      if (name) category.name = name;
+      if (mainCategory) category.mainCategory = mainCategory;
+
+      category.save();
+      // this method doesnt ensure schema validation
+      // const data = await Category.findOneAndUpdate(
+      //   { _id: req.params.categoryId },
+      //   req.body
+      // );
+      // to-do: other status
+      res.status(201).json({ data, status: "success" });
     } catch (e) {
-      res.status(500).json({ errorNo: 500, msg: e.message });
+      res.status(500).json({ error: e, status: "error" });
     }
   }
 
   static async apiDeleteCategory(req, res, next) {
     try {
-      const categoryId = req.params.categoryId;
-      console.log(categoryId);
-      const categoryResponse = await CategoriesDAO.deleteCategoryById(
-        categoryId
-      );
+      // vanilla mongo:
 
-      if (categoryResponse.deletedCount === 0 || categoryResponse.error) {
-        throw new Error(`No article found with Id: ${categoryId}`);
-      }
+      // const categoryId = req.params.categoryId;
+      // console.log(categoryId);
+      // const categoryResponse = await CategoriesDAO.deleteCategoryById(
+      //   categoryId
+      // );
 
-      res.json({ /* response: categoryResponse, */ status: "success" });
+      // if (categoryResponse.deletedCount === 0 || categoryResponse.error) {
+      //   throw new Error(`No article found with Id: ${categoryId}`);
+      // }
+
+      const data = await Category.findByIdAndDelete(req.params.categoryId);
+
+      res.json({ data, status: "success" });
     } catch (e) {
-      res.status(500).json({ errorNo: 500, msg: e.message });
+      res.status(500).json({ error: e, status: "error" });
     }
   }
 }

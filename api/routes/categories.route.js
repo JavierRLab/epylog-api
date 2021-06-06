@@ -8,9 +8,16 @@ router
   .get(CategoriesCtrl.apiGetCategories)
   .post(CategoriesCtrl.apiPostCategory);
 
+router.route("/main-categories").get(CategoriesCtrl.apiGetMainCategories);
+
 router
   .route("/:categoryId")
+  .get(CategoriesCtrl.apiGetCategory)
   .put(CategoriesCtrl.apiUpdateCategory)
   .delete(CategoriesCtrl.apiDeleteCategory);
+
+router
+  .route("/:mainId/subcategories")
+  .get(CategoriesCtrl.apiGetSubCategoriesByMainId);
 
 export default router;

@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     // validate: (value) => {
     //   if (validator.isEmail(value)) {
     //     console.log(value, "Invalid Email address");
-    //     throw new Error({ error: "Invalid Email address" });
+    //     throw new Error("Invalid Email address");
     //   }
     // },
   },
@@ -51,6 +51,13 @@ const userSchema = mongoose.Schema({
   ],
 });
 
+// virtual field generated post-query, not persisted in db
+userSchema.virtual("articles", {
+  ref: "Authorship",
+  localField: "_id",
+  foreignField: "author",
+});
+
 userSchema.pre("save", async function (next) {
   // Hash the password before saving the user model
   if (this.isModified("password")) {
@@ -71,12 +78,12 @@ userSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Error({ error: "Invalid login credentials" });
+    throw new Error("Invalid login credentials");
   }
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
     console.log("model: Invalid login credentials");
-    throw new Error({ error: "Invalid login credentials" });
+    throw new Error("Invalid login credentials");
   }
   return user;
 };

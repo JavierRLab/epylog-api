@@ -11,9 +11,9 @@ export default class UserController {
       const user = new User(req.body);
       await user.save();
       const token = await user.generateAuthToken();
-      res.status(201).json({ user, token });
+      res.status(201).json({ user, token, status: "success" });
     } catch (e) {
-      res.status(400).json(e);
+      res.status(400).json({ error: e.message, status: "success" });
     }
   }
 
@@ -28,10 +28,10 @@ export default class UserController {
           .json({ error: "Login failed! Check authentication credentials" });
       }
       const token = await user.generateAuthToken();
-      res.json({ user, token });
+      res.json({ user, token, status: "success" });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ errorNo: 400, msg: e.message });
+      res.status(400).json({ error: e.message, status: "success" });
     }
   }
 
@@ -43,11 +43,9 @@ export default class UserController {
       });
 
       await req.user.save();
-      res.status(200).json({
-        success: true,
-      });
+      res.status(200).json({ status: "success" });
     } catch (e) {
-      res.status(500).json(e);
+      res.status(500).json({ error: e.message, status: "success" });
     }
   }
 
@@ -56,11 +54,9 @@ export default class UserController {
     try {
       req.user.tokens.splice(0, req.user.tokens.length);
       await req.user.save();
-      res.status(200).json({
-        success: true,
-      });
+      res.status(200).json({ status: "success" });
     } catch (e) {
-      res.status(500).json(e);
+      res.status(500).json({ error: e.message, status: "success" });
     }
   }
 }

@@ -12,12 +12,15 @@
     "type": "git",
     "url": "git+https://github.com/JavierRLab/epylog-api.git"
   },
-  "author": "Kevin & Javier",
+  "author": "Kevin L Ruiz & Javier R Labrado",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/JavierRLab/epylog-api/issues"
   },
   "homepage": "https://github.com/JavierRLab/epylog-api#readme",
+  "engines": {
+    "node": "14.x"
+  },
   "devDependencies": {
     "nodemon": "^2.0.7"
   },

@@ -33,27 +33,27 @@ mongoose
   .catch((err) => {
     console.error(err.stack);
     process.exit(1);
-  });
-// .then(async (client) => {
-//   app.listen(port,() => {
-//     console.log(`listening on port: ${port}`);
-//   })
-// })
-
-MongoClient.connect(process.env.EPYLOG_DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .catch((err) => {
-    console.error(err.stack);
-    process.exit(1);
   })
   .then(async (client) => {
-    await ArticlesDAO.injectDB(client);
-    await CategoriesDAO.injectDB(client);
-    await UsersDAO.injectDB(client);
-    console.log("Success: connected to MongoDb!");
     app.listen(port, () => {
-      console.log(`Listening on port: ${port}`);
+      console.log(`listening on port: ${port}`);
     });
   });
+
+// MongoClient.connect(process.env.EPYLOG_DB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+//   .catch((err) => {
+//     console.error(err.stack);
+//     process.exit(1);
+//   })
+//   .then(async (client) => {
+//     await ArticlesDAO.injectDB(client);
+//     await CategoriesDAO.injectDB(client);
+//     await UsersDAO.injectDB(client);
+//     console.log("Success: connected to MongoDb!");
+//     app.listen(port, () => {
+//       console.log(`Listening on port: ${port}`);
+//     });
+//   });

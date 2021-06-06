@@ -92,7 +92,7 @@ export default class CategoryController {
       //   req.body
       // );
       // to-do: other status
-      res.status(201).json({ data, status: "success" });
+      res.status(201).json({ category, status: "success" });
     } catch (e) {
       res.status(500).json({ error: e.message, status: "error" });
     }
@@ -112,9 +112,9 @@ export default class CategoryController {
       //   throw new Error(`No article found with Id: ${categoryId}`);
       // }
 
-      const data = await Category.findByIdAndDelete(req.params.categoryId);
+      const category = await Category.findByIdAndDelete(req.params.categoryId);
 
-      res.json({ data, status: "success" });
+      res.json({ data: category, status: "success" });
     } catch (e) {
       res.status(500).json({ error: e.message, status: "error" });
     }

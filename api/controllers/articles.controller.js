@@ -53,7 +53,7 @@ export default class ArticleController {
       res.json({ data, status: "success" });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ error: e, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 
@@ -68,7 +68,7 @@ export default class ArticleController {
 
       res.status(200).json({ article, status: "success" });
     } catch (e) {
-      res.status(404).json({ error: e, status: "error" });
+      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -92,7 +92,7 @@ export default class ArticleController {
       res.status(201).json({ article, status: "success" });
     } catch (e) {
       console.error(e);
-      res.status(400).json({ error: e, status: "error" });
+      res.status(400).json({ error: e.message, status: "error" });
     }
   }
 
@@ -122,7 +122,7 @@ export default class ArticleController {
 
       res.status(201).json({ article, status: "success" });
     } catch (e) {
-      res.status(500).json({ error: e, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 
@@ -156,7 +156,7 @@ export default class ArticleController {
       res.json({ article, status: "success" });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ error: e, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 }

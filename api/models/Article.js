@@ -90,7 +90,8 @@ articleSchema.statics.getArticles = async function ({
       },
     });
 
-  // if unable to complete query, return empty list with real article count (wrong pagination probably)
+  // if unable to complete query, return empty list with real article count
+  // (wrong pagination probably)
   if (!articles) {
     return { articles: [], totalArticles };
   }

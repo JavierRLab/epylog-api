@@ -1,6 +1,11 @@
-// import { response } from "express";
-// import CategoriesDAO from "../dao/categoriesDAO.js";
 import Category from "../models/Category.js";
+
+/**
+ * @swagger
+ * tags:
+ *  name: Categories
+ *  description: The Categories of the Articles managed by the API
+ */
 
 export default class CategoryController {
   static async apiGetCategories(req, res, next) {

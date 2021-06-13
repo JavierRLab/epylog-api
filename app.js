@@ -16,7 +16,10 @@ const options = {
       version: "1.0.0",
       description: "A RESTful API for the Epylog App",
     },
-    servers: [{ url: "http://localhost:5000/api/v1" }],
+    servers: [
+      { url: "https://epylog-api.herokuapp.com/api/v1/" },
+      { url: "http://localhost:5000/api/v1" },
+    ],
   },
   apis: ["./api/controllers/*.js"],
 };

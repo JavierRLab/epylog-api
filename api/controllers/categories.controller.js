@@ -8,14 +8,31 @@ import Category from "../models/Category.js";
  */
 
 export default class CategoryController {
+  /**
+   * @swagger
+   * /categories:
+   *  get:
+   *    summary: Returns the list of all Categories
+   *    tags: [Categories]
+   *    responses:
+   *      200:
+   *        description: The list of all Categories
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *            example:
+   *              categories: [{},{}]
+   *              status: "success"
+   *      404:
+   *        description: No category found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No category found"
+   *              status: "error"
+   */
   static async apiGetCategories(req, res, next) {
-    // vanilla mongo:
-
-    //   const categoriesList = await CategoriesDAO.getCategories();
-    //   console.log(categoriesList);
-    //   let categoriesResponse = { categories: categoriesList };
-    //   res.json({ categoriesResponse, status: "success" });
-
     try {
       const categories = await Category.getAllCategories();
       res.status(200).json({ categories, status: "success" });

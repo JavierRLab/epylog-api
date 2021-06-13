@@ -1,10 +1,97 @@
 import ArticlesDAO from "../dao/articlesDAO.js";
 import Article from "../models/Article.js";
 import Authorship from "../models/Authorship.js";
+/**
+ * @swagger
+ * tags:
+ *  name: Articles
+ *  description: The Articles managed by the API
+ */
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Article:
+ *      type: Object
+ *      properties:
+ *        _id:
+ *          type: String
+ *          description: Auto-generated id
+ *        title:
+ *          type: String
+ *        description:
+ *          type: String
+ *        categories:
+ *          type: String
+ */
 
 export default class ArticleController {
+  /**
+   * @swagger
+   * /articles:
+   *  get:
+   *    summary: Returns a filtered list of Articles
+   *    tags: [Articles]
+   *    parameters:
+   *      - in: query
+   *        name: title
+   *        schema:
+   *          type: String
+   *        description: The title to Search for Articles
+   *      - in: query
+   *        name: page
+   *        schema:
+   *          type: Integer
+   *          min: 1
+   *          default: 1
+   *        description: The starting page of the Search
+   *      - in: query
+   *        name: articlesPerPage
+   *        schema:
+   *          type: Integer
+   *        min: 1
+   *        default: 10
+   *        description: The Articles per page of the Search
+   *    responses:
+   *      200:
+   *        description: The list of the Articles and pagination data
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *            example:
+   *              data:
+   *                articles: [{},{}]
+   *                filters: { title: "stronger" }
+   *                page: 1
+   *                articlesPerPage: 2
+   *                totalPages: 6
+   *                totalArticles: 11
+   *              status: "success"
+   *      400:
+   *        description: Error in pagination
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "Error in pagination"
+   *              status: "error"
+   *      404:
+   *        description: No articles found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No articles found"
+   *              status: "error"
+   *      500:
+   *        description: Internal Server Error
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "Internal Server Error"
+   *              status: "error"
+   */
   static async apiGetArticles(req, res, next) {
-    // req.query --> /articles?title=rats
     const page = req.query.page ? parseInt(req.query.page, 10) : 1;
     const articlesPerPage = req.query.articlesPerPage
       ? parseInt(req.query.articlesPerPage, 10 /* : parseInt radix */)
@@ -12,15 +99,7 @@ export default class ArticleController {
     let filters = {};
     if (req.query.title) {
       filters.title = req.query.title;
-    } /* else {
-      // to-do: other filters
-    } */
-
-    // const { articlesList, totalNumArticles } = await ArticlesDAO.getArticles({
-    //   filters,
-    //   page,
-    //   articlesPerPage,
-    // });
+    }
 
     try {
       const { articles, totalArticles } = await Article.getArticles({
@@ -43,8 +122,8 @@ export default class ArticleController {
 
       let data = {
         articles,
-        page,
         filters,
+        page,
         articlesPerPage,
         totalPages: Math.ceil(totalArticles / articlesPerPage),
         totalArticles,
@@ -57,13 +136,36 @@ export default class ArticleController {
     }
   }
 
+  /**
+   * @swagger
+   * /articles/{id}:
+   *  get:
+   *    summary: Get the Article by Id
+   *    tags: [Articles]
+   *    paramaters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *          type: string
+   *        required: true
+   *        description: The Article Id
+   *    responses:
+   *      200:
+   *        description: The Article with the specified Id
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *      404:
+   *        description: No article found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No article found"
+   *              status: "error"
+   */
   static async apigetArticleById(req, res, next) {
     try {
-      // const articleId = req.params.articleId;
-      // const articleResponse = await ArticlesDAO.getArticleById(articleId);
-      // if (!articleResponse || articleResponse.error) {
-      //   throw new Error(`No article found with Id: ${articleId}`);
-      // }
       const article = await Article.getArticleById(req.params.articleId);
 
       res.status(200).json({ article, status: "success" });
@@ -72,6 +174,33 @@ export default class ArticleController {
     }
   }
 
+  /**
+   * @swagger
+   * /articles:
+   *  post:
+   *    summary: Create a new Article
+   *    tags: [Articles]
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: ''
+   *    responses:
+   *      201:
+   *        description: The Article
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *      500:
+   *        description: Internal Server Error
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "Internal Server Error"
+   *              status: "error"
+   */
   static async apiPostArticle(req, res, next) {
     try {
       const article = new Article(req.body);
@@ -92,10 +221,45 @@ export default class ArticleController {
       res.status(201).json({ article, status: "success" });
     } catch (e) {
       console.error(e);
-      res.status(400).json({ error: e.message, status: "error" });
+      res.status(500).json({ error: e.message, status: "error" });
     }
   }
 
+  /**
+   * @swagger
+   * /articles/{id}:
+   *  put:
+   *    summary: Update the Article by Id
+   *    tags: [Articles]
+   *    paramaters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *          type: string
+   *        required: true
+   *        description: The Article Id
+   *    responses:
+   *      201:
+   *        description: Updated successfully
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *      404:
+   *        description: No article found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No article found"
+   *              status: "error"
+   *      500:
+   *        description: Internal Server Error
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "Internal Server Error"
+   *              status: "error"
+   */
   static async apiUpdateArticle(req, res, next) {
     try {
       const article = await Article.findById(req.params.articleId);
@@ -126,24 +290,43 @@ export default class ArticleController {
     }
   }
 
+  /**
+   * @swagger
+   * /articles/{id}:
+   *  delete:
+   *    summary: Delete the Article by Id
+   *    tags: [Articles]
+   *    paramaters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *          type: string
+   *        required: true
+   *        description: The Article Id
+   *    responses:
+   *      200:
+   *        description: Deleted successfully
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: ''
+   *      404:
+   *        description: No article found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No article found"
+   *              status: "error"
+   *      500:
+   *        description: Internal Server Error
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "Internal Server Error"
+   *              status: "error"
+   */
   static async apiDeleteArticle(req, res, next) {
     try {
-      // const articleId = req.params.articleId;
-      // const articleResponse = await ArticlesDAO.deleteArticleById(articleId);
-
-      // var { error } = articleResponse;
-      // if (error) {
-      //   return res.status(400).json({ status: "error", error: error });
-      // }
-
-      // if (articleResponse.modifiedCount === 0) {
-      //   throw new Error(`unable to delete article - No article found with Id: ${articleId}`);
-      // }
-
-      // if (articleResponse.deletedCount === 0 || articleResponse.error) {
-      //   throw new Error(`No article found with Id: ${articleId}`);
-      // }
-
       const article = await Article.findByIdAndDelete(req.params.articleId);
 
       if (!article) {

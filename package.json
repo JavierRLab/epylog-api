@@ -1,7 +1,7 @@
 {
   "name": "epylog-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A RESTful API for the Epylog App",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -32,6 +32,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.8",
+    "swagger-jsdoc": "^6.0.1",
+    "swagger-ui-express": "^4.1.6",
     "validator": "^13.6.0"
   }
 }

@@ -17,7 +17,7 @@ const options = {
       description: "A RESTful API for the Epylog App",
     },
     servers: [
-      { url: "https://epylog-api.herokuapp.com/api/v1/" },
+      { url: "https://epylog-api.herokuapp.com/api/v1" },
       { url: "http://localhost:5000/api/v1" },
     ],
   },
@@ -32,7 +32,8 @@ app.use(express.json());
 app.use("/api/v1/articles", articles);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/users", users);
-app.use(["/api/v1/docs", "/"], swaggerUI.serve, swaggerUI.setup(specs));
+app.use("/api/v1/docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use("/", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("*", (req, res) => {
   res.status(404).json({ errorNo: 404, msg: "Route not found" });
 });

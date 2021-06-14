@@ -1,4 +1,3 @@
-import ArticlesDAO from "../dao/articlesDAO.js";
 import Article from "../models/Article.js";
 import Authorship from "../models/Authorship.js";
 /**
@@ -6,24 +5,49 @@ import Authorship from "../models/Authorship.js";
  * tags:
  *  name: Articles
  *  description: The Articles managed by the API
- */
-
-/**
- * @swagger
  * components:
  *  schemas:
  *    Article:
- *      type: Object
+ *      type: object
  *      properties:
  *        _id:
  *          type: String
- *          description: Auto-generated id
+ *          description: Auto-generated Id
  *        title:
  *          type: String
  *        description:
  *          type: String
  *        categories:
+ *          type: array
+ *          items:
+ *            type: String
+ *            description: the Id of the Category
+ *        ISCED:
+ *          type: Integer
+ *          min: 0
+ *          max: 8
+ *        publishDate:
+ *          type: Date
+ *          description: the Date of publication
+ *        uploadDate:
+ *          type: Date
+ *          default: Date.now
+ *          description: the Date it enters the system
+ *        content:
  *          type: String
+ *        authors:
+ *          type: array
+ *          items:
+ *            type: String
+ *            description: the Id of the Author
+ *      required:
+ *        - title
+ *        - description
+ *        - categories
+ *        - ISCED
+ *        - publishDate
+ *        - content
+ *
  */
 
 export default class ArticleController {
@@ -142,7 +166,7 @@ export default class ArticleController {
    *  get:
    *    summary: Get the Article by Id
    *    tags: [Articles]
-   *    paramaters:
+   *    parameters:
    *      - in: path
    *        name: id
    *        schema:
@@ -155,7 +179,7 @@ export default class ArticleController {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: ''
+   *              $ref: "#/components/schemas/Article"
    *      404:
    *        description: No article found
    *        content:
@@ -185,14 +209,14 @@ export default class ArticleController {
    *      content:
    *        application/json:
    *          schema:
-   *            $ref: ''
+   *            $ref: "#/components/schemas/Article"
    *    responses:
    *      201:
-   *        description: The Article
+   *        description: The created Article
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: ''
+   *              $ref: "#/components/schemas/Article"
    *      500:
    *        description: Internal Server Error
    *        content:
@@ -231,20 +255,26 @@ export default class ArticleController {
    *  put:
    *    summary: Update the Article by Id
    *    tags: [Articles]
-   *    paramaters:
+   *    parameters:
    *      - in: path
    *        name: id
    *        schema:
    *          type: string
    *        required: true
    *        description: The Article Id
+   *    requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *          schema:
+   *            $ref: "#/components/schemas/Article"
    *    responses:
    *      201:
    *        description: Updated successfully
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: ''
+   *              $ref: "#/components/schemas/Article"
    *      404:
    *        description: No article found
    *        content:
@@ -296,7 +326,7 @@ export default class ArticleController {
    *  delete:
    *    summary: Delete the Article by Id
    *    tags: [Articles]
-   *    paramaters:
+   *    parameters:
    *      - in: path
    *        name: id
    *        schema:
@@ -309,7 +339,7 @@ export default class ArticleController {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: ''
+   *              $ref: "#/components/schemas/Article"
    *      404:
    *        description: No article found
    *        content:

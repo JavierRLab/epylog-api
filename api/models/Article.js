@@ -57,14 +57,16 @@ articleSchema.statics.getArticles = async function ({
   page = 1,
   articlesPerPage = 10,
 } = {}) {
-  let query;
+  let query = {};
   if (filters) {
     if ("title" in filters) {
-      let regexQuery = new RegExp(`.*${filters["title"]}.*`, "i");
-      query = { title: { $regex: regexQuery } };
-    } /* else {
-      // to-do: other filters
-    } */
+      let regexQuery = new RegExp(`.*${filters.title}.*`, "i");
+      query.title = { $regex: regexQuery };
+    }
+    if ("category" in filters) {
+      query.categories = filters.category;
+    }
+    console.log(filters);
   }
 
   const totalArticles = await this.countDocuments(query);

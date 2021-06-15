@@ -8,12 +8,13 @@ router.route("/").post(UserCtrl.apiPostUser);
 
 router.route("/login").post(UserCtrl.apiLoginUser);
 
-router.route("/me").get(auth, UserCtrl.apiGetUser);
+router
+  .route("/me")
+  .get(auth, UserCtrl.apiGetSelfUser)
+  .put(auth, UserCtrl.apiUpdateUser);
 
 router.route("/me/logout").post(auth, UserCtrl.apiLogOutUser);
 
 router.route("/me/logoutall").post(auth, UserCtrl.apiLogOutAll);
-
-// /me/newArticle
 
 export default router;

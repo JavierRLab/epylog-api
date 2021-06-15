@@ -101,7 +101,7 @@ export default class CategoryController {
 
   /**
    * @swagger
-   * /categories/main-categories:
+   * /categories/maincategories:
    *  get:
    *    summary: Returns the list of all Main Categories
    *    tags: [Categories]

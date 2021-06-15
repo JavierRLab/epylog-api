@@ -8,7 +8,7 @@ router
   .get(CategoriesCtrl.apiGetCategories)
   .post(CategoriesCtrl.apiPostCategory);
 
-router.route("/main-categories").get(CategoriesCtrl.apiGetMainCategories);
+router.route("/maincategories").get(CategoriesCtrl.apiGetMainCategories);
 
 router
   .route("/:categoryId")

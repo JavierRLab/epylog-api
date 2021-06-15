@@ -64,6 +64,11 @@ export default class ArticleController {
    *          type: String
    *        description: The title to Search for Articles
    *      - in: query
+   *        name: category
+   *        schema:
+   *          type: String
+   *        description: The id of the Category to Search for Articles
+   *      - in: query
    *        name: page
    *        schema:
    *          type: Integer
@@ -121,9 +126,8 @@ export default class ArticleController {
       ? parseInt(req.query.articlesPerPage, 10 /* : parseInt radix */)
       : 10;
     let filters = {};
-    if (req.query.title) {
-      filters.title = req.query.title;
-    }
+    if (req.query.title) filters.title = req.query.title;
+    if (req.query.category) filters.category = req.query.category;
 
     try {
       const { articles, totalArticles } = await Article.getArticles({
@@ -157,44 +161,6 @@ export default class ArticleController {
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: e.message, status: "error" });
-    }
-  }
-
-  /**
-   * @swagger
-   * /articles/{id}:
-   *  get:
-   *    summary: Get the Article by Id
-   *    tags: [Articles]
-   *    parameters:
-   *      - in: path
-   *        name: id
-   *        schema:
-   *          type: string
-   *        required: true
-   *        description: The Article Id
-   *    responses:
-   *      200:
-   *        description: The Article with the specified Id
-   *        content:
-   *          application/json:
-   *            schema:
-   *              $ref: "#/components/schemas/Article"
-   *      404:
-   *        description: No article found
-   *        content:
-   *          application/json:
-   *            example:
-   *              error: "No article found"
-   *              status: "error"
-   */
-  static async apigetArticleById(req, res, next) {
-    try {
-      const article = await Article.getArticleById(req.params.articleId);
-
-      res.status(200).json({ article, status: "success" });
-    } catch (e) {
-      res.status(404).json({ error: e.message, status: "error" });
     }
   }
 
@@ -252,6 +218,44 @@ export default class ArticleController {
   /**
    * @swagger
    * /articles/{id}:
+   *  get:
+   *    summary: Get the Article by Id
+   *    tags: [Articles]
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        schema:
+   *          type: string
+   *        required: true
+   *        description: The Article Id
+   *    responses:
+   *      200:
+   *        description: The Article with the specified Id
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: "#/components/schemas/Article"
+   *      404:
+   *        description: No article found
+   *        content:
+   *          application/json:
+   *            example:
+   *              error: "No article found"
+   *              status: "error"
+   */
+  static async apigetArticleById(req, res, next) {
+    try {
+      const article = await Article.getArticleById(req.params.articleId);
+
+      res.status(200).json({ article, status: "success" });
+    } catch (e) {
+      res.status(404).json({ error: e.message, status: "error" });
+    }
+  }
+
+  /**
+   * @swagger
+   * /articles/{id}:
    *  put:
    *    summary: Update the Article by Id
    *    tags: [Articles]
@@ -301,8 +305,15 @@ export default class ArticleController {
         });
       }
 
-      const { title, description, categories, ISCED, publishDate, content } =
-        req.body;
+      const {
+        title,
+        description,
+        categories,
+        ISCED,
+        publishDate,
+        content,
+        authors,
+      } = req.body;
 
       // make sure not to set null properties if it doesn't appear in req.body
       if (title) article.title = title;
@@ -311,6 +322,16 @@ export default class ArticleController {
       if (ISCED) article.ISCED = ISCED;
       if (publishDate) article.publishDate = publishDate;
       if (content) article.content = content;
+      // if (Array.isArray(authors)) {
+      //   // also checks for null
+      //   for (const authorId of authors) {
+      //     let authorship = new Authorship({
+      //       author: authorId,
+      //       article: article._id,
+      //     });
+      //     authorship.save();
+      //   }
+      // }
 
       await article.save();
 

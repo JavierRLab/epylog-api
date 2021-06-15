@@ -3,21 +3,30 @@ import User from "../models/User.js";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.header("Authorization").replace("Bearer ", "");
+    let token = req.header("Authorization");
+    if (!token) {
+      return res
+        .status(401)
+        .json({ error: "auth: Invalid login credentials", status: "error" });
+    }
+    token = token.replace("Bearer ", "");
     const data = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findOne({
       _id: data._id,
       "tokens.token": token,
     });
     if (!user) {
-      throw new Error("auth: Invalid login credentials");
+      return res
+        .status(401)
+        .json({ error: "auth: Invalid login credentials", status: "error" });
     }
 
     req.user = user;
     req.token = token;
     next();
   } catch (e) {
-    res.status(401).send({ error: "Not authorized to access this resource" });
+    console.log(e);
+    res.status(500).json({ error: e.message, status: "error" });
   }
 };
 

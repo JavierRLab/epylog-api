@@ -3,53 +3,59 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const userSchema = mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    // validate: (value) => {
-    //   if (validator.isEmail(value)) {
-    //     console.log(value, "Invalid Email address");
-    //     throw new Error("Invalid Email address");
-    //   }
-    // },
-  },
-  password: {
-    type: String,
-    required: true,
-    minLength: 8,
-  },
-  givenName: {
-    type: String,
-    required: true,
-  },
-  familyName: {
-    type: String,
-    required: true,
-  },
-  birthDate: {
-    type: Date,
-    required: true,
-  },
-  interests: {
-    type: Array,
-    required: false,
-  },
-  description: {
-    type: String,
-    required: false,
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
-      },
+const userSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      // validate: (value) => {
+      //   if (validator.isEmail(value)) {
+      //     console.log(value, "Invalid Email address");
+      //     throw new Error("Invalid Email address");
+      //   }
+      // },
     },
-  ],
-});
+    password: {
+      type: String,
+      required: true,
+      minLength: 8,
+    },
+    givenName: {
+      type: String,
+      required: true,
+    },
+    familyName: {
+      type: String,
+      required: true,
+    },
+    birthDate: {
+      type: Date,
+      required: true,
+    },
+    interests: {
+      type: Array,
+      required: false,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 // virtual field generated post-query, not persisted in db
 userSchema.virtual("articles", {
@@ -84,6 +90,16 @@ userSchema.statics.findByCredentials = async (email, password) => {
   if (!isPasswordMatch) {
     console.log("model: Invalid login credentials");
     throw new Error("Invalid login credentials");
+  }
+  return user;
+};
+
+userSchema.statics.getUserByIdPop = async function (id) {
+  const user = await this.findOne({ _id: id }, "-password -tokens").populate(
+    "articles"
+  );
+  if (!user) {
+    throw new Error(`No user found with Id: ${id}`);
   }
   return user;
 };

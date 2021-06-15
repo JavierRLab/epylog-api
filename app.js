@@ -33,9 +33,10 @@ app.use("/api/v1/articles", articles);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/users", users);
 app.use("/api/v1/docs", swaggerUI.serve, swaggerUI.setup(specs));
-app.use("/", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("*", (req, res) => {
-  res.status(404).json({ errorNo: 404, msg: "Route not found" });
+  res
+    .status(404)
+    .json({ error: "Route not found check /api/v1/docs", status: "error" });
 });
 
 export default app;

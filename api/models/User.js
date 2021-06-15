@@ -95,9 +95,18 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 userSchema.statics.getUserByIdPop = async function (id) {
-  const user = await this.findOne({ _id: id }, "-password -tokens").populate(
-    "articles"
-  );
+  const user = await this.findOne({ _id: id }, "-password -tokens").populate({
+    path: "articles",
+    populate: {
+      path: "article",
+      populate: {
+        path: "categories",
+        populate: {
+          path: "mainCategory",
+        },
+      },
+    },
+  });
   if (!user) {
     throw new Error(`No user found with Id: ${id}`);
   }

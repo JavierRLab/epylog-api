@@ -80,6 +80,43 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
+userSchema.statics.getUsersPop = async function ({
+  filters = null,
+  page = 1,
+  usersPerPage,
+} = {}) {
+  let query = {};
+  if (filters) {
+    if (filters.familyName) {
+      let regexQuery = new RegExp(`.*${filters.familyName}.*`, "i");
+      query.familyName = { $regex: regexQuery };
+    }
+  }
+
+  const totalUsers = await this.countDocuments(query);
+  if (totalUsers < 1) {
+    return { users: [], totalUsers: 0 };
+  }
+
+  const users = await this.find(query)
+    .select("-password -tokens")
+    .limit(usersPerPage)
+    .skip((page - 1) * usersPerPage)
+    .populate({
+      path: "articles",
+      populate: {
+        path: "article",
+        select: "_id title",
+      },
+    });
+
+  if (!users) {
+    return { users: [], totalUsers };
+  }
+
+  return { users, totalUsers };
+};
+
 userSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password
   const user = await User.findOne({ email });

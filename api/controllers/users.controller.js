@@ -264,8 +264,7 @@ export default class UserController {
    */
   static async apiGetSelfUser(req, res, next) {
     try {
-      const user = req.user.select("-password -tokens");
-      res.status(200).json({ user, status: "success" });
+      res.status(200).json({ user: req.user, status: "success" });
     } catch (e) {
       res.status(404).json({ error: e.message, status: "error" });
     }

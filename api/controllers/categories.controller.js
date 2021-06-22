@@ -67,6 +67,8 @@ export default class CategoryController {
    *  post:
    *    summary: Create a new Category
    *    tags: [Categories]
+   *    security:
+   *      - BearerAuth: []
    *    requestBody:
    *      required: true
    *      content:
@@ -180,6 +182,8 @@ export default class CategoryController {
    *  put:
    *    summary: Update the Category by Id
    *    tags: [Categories]
+   *    security:
+   *      - BearerAuth: []
    *    parameters:
    *      - in: path
    *        name: id
@@ -244,6 +248,8 @@ export default class CategoryController {
    *  delete:
    *    summary: Delete the Category by Id
    *    tags: [Categories]
+   *    security:
+   *      - BearerAuth: []
    *    parameters:
    *      - in: path
    *        name: id

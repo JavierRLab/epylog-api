@@ -170,6 +170,8 @@ export default class ArticleController {
    *  post:
    *    summary: Create a new Article
    *    tags: [Articles]
+   *    security:
+   *      - BearerAuth: []
    *    requestBody:
    *      required: true
    *      content:
@@ -259,6 +261,8 @@ export default class ArticleController {
    *  put:
    *    summary: Update the Article by Id
    *    tags: [Articles]
+   *    security:
+   *      - BearerAuth: []
    *    parameters:
    *      - in: path
    *        name: id
@@ -347,6 +351,8 @@ export default class ArticleController {
    *  delete:
    *    summary: Delete the Article by Id
    *    tags: [Articles]
+   *    security:
+   *      - BearerAuth: []
    *    parameters:
    *      - in: path
    *        name: id

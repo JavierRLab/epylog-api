@@ -393,6 +393,7 @@ export default class ArticleController {
         });
       }
 
+      await Authorship.deleteMany({ article: req.params.articleId });
       res.json({ article, status: "success" });
     } catch (e) {
       console.log(e);

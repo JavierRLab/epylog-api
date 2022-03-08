@@ -36,7 +36,8 @@ app.use("/api/v1/docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("*", (req, res) => {
   res
     .status(404)
-    .json({ error: "Route not found check /api/v1/docs", status: "error" });
+    .json({ error: "Route not found check /api/v1/docs", status: "error" })
+    .redirect("/api/v1/docs");
 });
 
 export default app;

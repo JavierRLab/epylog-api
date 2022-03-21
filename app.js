@@ -13,12 +13,12 @@ const options = {
     openapi: "3.0.0",
     info: {
       title: "Epylog API",
-      version: "1.0.0",
+      version: "1.1.10",
       description: "A RESTful API for the Epylog App",
     },
     servers: [
-      { url: "https://epylog-api.herokuapp.com/api/v1" },
-      { url: "http://localhost:5000/api/v1" },
+      { url: "https://epylog-api.herokuapp.com" },
+      { url: "http://localhost:5000" },
     ],
   },
   apis: ["./api/controllers/*.js"],

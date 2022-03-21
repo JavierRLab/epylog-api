@@ -6,9 +6,10 @@ Epylog is developed using MEVN Stack.
 
 ## Deployments
 
-You can check the RESTful API documentation and try the methods [here](https://epylog-api.herokuapp.com/api/v1/docs).
+You can check the RESTful API documentation and try the methods [here.](https://epylog-api.herokuapp.com/api/v1/docs)
 
-You can also see a Front-end Vue App [here](https://epylog.vercel.app/home) that consumes from this API. (Repository: https://github.com/codeGraphKL/epylog)
+You can also see a Front-end Vue App that consumes from this API [here.](https://epylog.vercel.app/home)  
+Or check its [repo.](https://github.com/codeGraphKL/epylog)
 
 ## Installation
 
@@ -21,8 +22,7 @@ cd epilog-api
 npm i
 npm start
 ```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-**Open Source is the best source!**

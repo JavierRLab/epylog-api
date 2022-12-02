@@ -6,10 +6,7 @@ Epylog is developed using MEVN Stack.
 
 ## Deployments
 
-You can check the RESTful API documentation and try the methods [here.](https://epylog-api.herokuapp.com/api/v1/docs)
-
-You can also see a Front-end Vue App that consumes from this API [here.](https://epylog.vercel.app/home)  
-Or check its [repo.](https://github.com/codeGraphKL/epylog)
+You can check the RESTful API documentation and try the methods [here.](https://epylog-api.javierrlab.repl.co/v1/docs)
 
 ## Installation
 

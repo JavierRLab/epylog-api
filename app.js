@@ -17,7 +17,7 @@ const options = {
       description: "A RESTful API for the Epylog App",
     },
     servers: [
-      { url: "https://epylog-api.herokuapp.com" },
+      { url: "https://epylog-api.javierrlab.repl.co/api/v1" },
       { url: "http://localhost:5000" },
     ],
   },
@@ -27,6 +27,7 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 app.use(cors());
+
 app.use(express.json());
 
 app.use("/api/v1/articles", articles);
